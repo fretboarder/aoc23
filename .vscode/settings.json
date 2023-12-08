@@ -6,11 +6,6 @@
         },
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
-    "python.testing.pytestArgs": [
-        "tests"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
     "editor.defaultFormatter": "charliermarsh.ruff",
     "ruff.enable": true,
     "ruff.organizeImports": true,
@@ -18,5 +13,10 @@
     "python.analysis.fixAll": [
         "source.convertImportFormat",
         "source.unusedImports"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

@@ -1,8 +1,7 @@
 import pytest
+from aoc23 import _version
+from aoc23.cli import main
 from click.testing import CliRunner
-
-from src import _version
-from src.cli import main
 
 
 @pytest.fixture()
