@@ -40,4 +40,3 @@ jobs:
 
     - name: Run mypy
       run: poetry run nox -s mypy
-      continue-on-error: true
