@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/fretboarder/aoc23/compare/v0.3.0...v0.3.1) (2023-12-09)
+
+
+### Bug Fixes
+
+* remove solution values from comments ([6b211ba](https://github.com/fretboarder/aoc23/commit/6b211ba6b98ae66ab6e66866e289cdfa76b7a986))
+
 ## [0.3.0](https://github.com/fretboarder/aoc23/compare/v0.2.0...v0.3.0) (2023-12-09)
 
 
