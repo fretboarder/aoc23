@@ -43,7 +43,5 @@ def main[A, B]() -> tuple[A, B]:
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    # Solution 1: 55123
     print("Solution 1", sol1)
-    # Solution 2: 55260
     print("Solution 2", sol2)

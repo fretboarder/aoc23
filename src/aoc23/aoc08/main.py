@@ -49,7 +49,5 @@ def main[A, B]() -> tuple[A, B]:
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    # Solution 1: 21389
     pp(f"Solution 1: {sol1}")
-    # Solution 2: 21083806112641
     pp(f"Solution 2: {sol2}")
