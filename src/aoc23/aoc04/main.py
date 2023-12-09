@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from pprint import pp
 from typing import TypedDict
 
 from aoc23.support import get_input
@@ -38,15 +39,15 @@ def accumulate(pile: list[Card]) -> int:
     return sum(list(final_pile.values()))
 
 
-def main[A, B]() -> tuple[A, B]:
+def main() -> tuple[int, int]:
     cards = get_input(Path(__file__).parent / "input01.txt", parse_line)
     return get_worth(cards), accumulate(cards)
 
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    print("Solution 1", sol1)
-    print("Solution 2", sol2)
+    pp(f"Solution 1: {sol1}")
+    pp(f"Solution 2: {sol2}")
 
 
 #   1   2   3   4   5   6   # card ids

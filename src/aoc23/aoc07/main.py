@@ -1,9 +1,11 @@
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from itertools import groupby
 from pathlib import Path
 from pprint import pp
+from typing import Self
 
 from aoc23.support import get_input
 
@@ -46,7 +48,7 @@ class Cards:
                     high_card = max(Counter(hand).keys())
             case 3:
                 # three of a kind or two pairs
-                if 3 in [len(c) for c in grouped_hand]:
+                if 3 in [len(c) for c in grouped_hand]:  # noqa: PLR2004
                     hand_type = HandType.THREE_OF_A_KIND
                     high_card = Counter(hand).most_common()[0][0]
                     if high_card == 1:
@@ -63,13 +65,13 @@ class Cards:
                             [
                                 val
                                 for val, cnt in Counter(hand).most_common()
-                                if cnt == 2
+                                if cnt == 2  # noqa: PLR2004
                             ]
                         )
 
             case 2:
                 # full_house or four of a kind
-                if 4 in [len(c) for c in grouped_hand]:
+                if 4 in [len(c) for c in grouped_hand]:  # noqa: PLR2004
                     hand_type = HandType.FOUR_OF_A_KIND
                 else:
                     hand_type = HandType.FULL_HOUSE
@@ -81,29 +83,30 @@ class Cards:
                 hand_type = HandType.FIVE_OF_A_KIND
                 high_card = hand[0]
             case _:
-                raise ValueError("this is not expected!")
+                msg = "this is not expected!"
+                raise ValueError(msg)
         return hand_type, high_card
 
-    def _handle_jokers(self):
+    def _handle_jokers(self) -> None:
         c = Counter(self.hand)
         if 1 not in c:
             self.joker_hand = self.hand
             self.joker_hand_type = self.hand_type
             return
-        self.joker_hand = list(
-            map(lambda c: self.high_card if c == 1 else c, self.hand)
-        )
+        self.joker_hand = [self.high_card if c == 1 else c for c in self.hand]
         self.joker_hand_type, _ = Cards._get_hand_type(self.joker_hand)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.hand_type, self.high_card = Cards._get_hand_type(self.hand)
         self._handle_jokers()
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Cards):
+            return NotImplemented
         # hands are considered equal if they are of same type
         return self.joker_hand_type.value == other.joker_hand_type.value
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: Self) -> bool:
         is_less = self.hand < other.hand
         return (
             is_less
@@ -112,7 +115,7 @@ class Cards:
         )
 
 
-def parse_line(card_map: dict[str, int]):
+def parse_line(card_map: dict[str, int]) -> Callable[[str], Cards]:
     def parse(line: str) -> Cards:
         hand, bid = line.split()
         return Cards([card_map[c] for c in hand], int(bid))
@@ -128,9 +131,9 @@ def solution2(cards: list[Cards]) -> int:
     return sum([rank * c.bid for rank, c in enumerate(sorted(cards), start=1)])
 
 
-def main[A, B]() -> tuple[A, B]:
-    cards1 = get_input(Path(__file__).parent / "input01.txt", parse_line(CARD_MAP_1))
-    cards2 = get_input(Path(__file__).parent / "input01.txt", parse_line(CARD_MAP_2))
+def main() -> tuple[int, int]:
+    cards1 = get_input(Path(__file__).parent / "input01.txt", parse_line(CARD_MAP_1))  # type: ignore  # noqa: PGH003
+    cards2 = get_input(Path(__file__).parent / "input01.txt", parse_line(CARD_MAP_2))  # type: ignore  # noqa: PGH003
     return solution1(cards1), solution2(cards2)
 
 

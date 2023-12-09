@@ -1,4 +1,5 @@
 from pathlib import Path
+from pprint import pp
 
 from aoc23.support import get_input
 
@@ -33,9 +34,9 @@ def line_to_value(line: str) -> int:
     return int(digits[0] + digits[-1]) if len(digits) else 0
 
 
-def main[A, B]() -> tuple[A, B]:
-    lines1 = get_input(Path(__file__).parent / "input01.txt")
-    lines2 = get_input(Path(__file__).parent / "input02.txt")
+def main() -> tuple[int, int]:
+    lines1: list[str] = get_input(Path(__file__).parent / "input01.txt")
+    lines2: list[str] = get_input(Path(__file__).parent / "input02.txt")
     return sum(line_to_value(line) for line in lines1), sum(
         line_to_value(dstring_to_digits(line)) for line in lines2
     )
@@ -43,5 +44,5 @@ def main[A, B]() -> tuple[A, B]:
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    print("Solution 1", sol1)
-    print("Solution 2", sol2)
+    pp(f"Solution 1: {sol1}")
+    pp(f"Solution 1: {sol1}")

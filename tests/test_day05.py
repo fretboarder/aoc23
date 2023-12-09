@@ -1,4 +1,3 @@
-import pytest
 from aoc23.aoc05 import main as d05
 
 

@@ -1,8 +1,7 @@
-import operator
 import re
 from dataclasses import dataclass
-from functools import reduce
 from pathlib import Path
+from pprint import pp
 
 from aoc23.support import get_input
 
@@ -30,7 +29,7 @@ def calc_distance(hold_time: int, max_time: int) -> int:
 
 
 # not really nice, but working
-def solution(races: list[Race]):
+def solution(races: list[Race]) -> int:
     result = 1
     for race in races:
         result_count = 0
@@ -42,12 +41,12 @@ def solution(races: list[Race]):
     return result
 
 
-def main[A, B]() -> tuple[A, B]:
-    lines = get_input(Path(__file__).parent / "input01.txt")
+def main() -> tuple[int, int]:
+    lines: list[str] = get_input(Path(__file__).parent / "input01.txt")
     return solution(get_races_01(lines)), solution(get_races_02(lines))
 
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    print("Solution 1", sol1)
-    print("Solution 2", sol2)
+    pp(f"Solution 1 {sol1}")
+    pp(f"Solution 2 {sol2}")

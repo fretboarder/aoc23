@@ -12,7 +12,7 @@ def ruff(session: nox.Session):
 def mypy(session: nox.Session):
     """Running mypy"""
     session.install("mypy", "click")
-    session.run("mypy", "src")
+    session.run("mypy", "src/aoc23")
 
 
 @nox.session()

@@ -2,6 +2,7 @@ import re
 from dataclasses import dataclass, field
 from itertools import batched
 from pathlib import Path
+from pprint import pp
 
 from aoc23.support import get_input
 
@@ -21,7 +22,7 @@ Mappings = dict[str, Ranges]
 
 
 def parse_input(lines: list[str]) -> tuple[Seeds, Mappings]:
-    mappings = dict()
+    mappings: Mappings = {}
     seeds = [int(n) for n in re.findall(r"\d+", lines[0])]
     map_name = ""
     for line in lines[1:]:
@@ -44,7 +45,7 @@ def get_mapped_minimum(value: int, ranges: Ranges) -> int:
     return value if not matches else min(matches)
 
 
-def find_mapped_value(mappings: Mappings, seed: int):
+def find_mapped_value(mappings: Mappings, seed: int) -> list[int]:
     def _loop(acc: list[int], mapping: int, keys: list[str]) -> list[int]:
         if keys == []:
             return acc
@@ -69,7 +70,7 @@ class Mapping:
 @dataclass
 class MappingChannel:
     offset: int
-    range: range
+    range: range  # noqa: A003
 
 
 @dataclass
@@ -78,7 +79,7 @@ class Mapper:
     mappings: tuple[Mapping, ...]
     channels: list[MappingChannel] = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         channels = [
             MappingChannel(m.dst - m.src, range(m.src, m.src + m.cnt))
             for m in self.mappings
@@ -169,7 +170,7 @@ def find_location(mappings: Mappings, seed_ranges: list[range]) -> int:
 
 
 def main() -> tuple[int, int]:
-    lines = get_input(Path(__file__).parent / "input01.txt")
+    lines: list[str] = get_input(Path(__file__).parent / "input01.txt")
     seeds, mappings = parse_input(lines)
     solution1 = {seed: find_mapped_value(mappings, seed)[-1] for seed in seeds}
     ranges = [range(seed, seed + length) for seed, length in batched(seeds, 2)]
@@ -178,5 +179,5 @@ def main() -> tuple[int, int]:
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    print("Solution 1", sol1)
-    print("Solution 2", sol2)
+    pp(f"Solution 1 {sol1}")
+    pp(f"Solution 2 {sol2}")

@@ -1,6 +1,7 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from pprint import pp
 
 from aoc23.support import get_input
 
@@ -62,15 +63,15 @@ def collect_adjacent(symbols: list[Pos], value_coords: set[ValueCoord]) -> int:
 def collect_adjacent2(symbols: list[Pos], value_coords: set[ValueCoord]) -> int:
     gear: list[int] = []
     for sym in symbols:
-        if (c := get_adjacent(sym, value_coords)) and len(c) == 2:
-            a, b = list(co.value for co in c)
+        if (c := get_adjacent(sym, value_coords)) and len(c) == 2:  # noqa: PLR2004
+            a, b = (co.value for co in c)
             gear.append(a * b)
     return sum(gear)
 
 
-def main[A, B]() -> tuple[A, B]:
+def main() -> tuple[int, int]:
     # Build a list of Values and their coordinates
-    lines1 = get_input(Path(__file__).parent / "input01.txt")
+    lines1: list[str] = get_input(Path(__file__).parent / "input01.txt")
     symbols, value_coords = parse_input(lines1)
     value = collect_adjacent(symbols, value_coords)
     gear = collect_adjacent2(symbols, value_coords)
@@ -79,5 +80,5 @@ def main[A, B]() -> tuple[A, B]:
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    print("Solution 1", sol1)
-    print("Solution 2", sol2)
+    pp(f"Solution 1: {sol1}")
+    pp(f"Solution 2: {sol2}")

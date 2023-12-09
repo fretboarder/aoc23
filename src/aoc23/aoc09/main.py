@@ -24,10 +24,9 @@ def create_history(line: list[int]) -> History:
         if set(next_line) == {0}:
             return acc
         new_line = line_diffs(next_line)
-        return loop([new_line] + acc, new_line)
+        return loop([new_line, *acc], new_line)
 
-    res = loop([line], line)
-    return res
+    return loop([line], line)
 
 
 def extrap1(history: History) -> int:
@@ -47,10 +46,8 @@ def extrap2(history: History) -> int:
 def solution(
     input_lines: list[list[int]], extrapolate: Callable[[History], int]
 ) -> int:
-    all: list[int] = []
-    for l in input_lines:
-        all.append(extrapolate(create_history(l)))
-    return sum(all)
+    all_values = [extrapolate(create_history(line)) for line in input_lines]
+    return sum(all_values)
 
 
 def main() -> tuple[int, int]:

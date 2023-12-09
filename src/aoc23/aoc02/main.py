@@ -1,6 +1,7 @@
 import re
 from functools import reduce
 from pathlib import Path
+from pprint import pp
 from typing import TypedDict
 
 from aoc23.support import get_input
@@ -26,23 +27,29 @@ def parse_line(line: str) -> Game:
     g = Game(id=int(gid), rolls=[])
     for cubeset in cubesets:
         cnt_cols = re.findall(r"(?P<cnt>\d+) (?P<col>\w+)", cubeset)
-        roll = Roll(**(EmptyRoll | dict([(col, int(cnt)) for cnt, col in cnt_cols])))
+
+        roll = EmptyRoll | Roll(**{col: int(cnt) for cnt, col in cnt_cols})  # type: ignore  # noqa: PGH003
         g["rolls"].append(roll)
     return g
 
 
-def game_possible(g: Game):
+MAX_RED = 12
+MAX_GREEN = 13
+MAX_BLUE = 14
+
+
+def game_possible(g: Game) -> bool:
     return sum(
         [
             1
             for r in g["rolls"]
-            if r["red"] <= 12 and r["green"] <= 13 and r["blue"] <= 14
+            if r["red"] <= MAX_RED and r["green"] <= MAX_GREEN and r["blue"] <= MAX_BLUE
         ]
     ) == len(g["rolls"])
 
 
-def min_cubes(g: Game):
-    def _reducer(rolls: Roll, next_roll: Roll):
+def min_cubes(g: Game) -> Roll:
+    def _reducer(rolls: Roll, next_roll: Roll) -> Roll:
         return Roll(
             red=max(rolls["red"], next_roll["red"]),
             green=max(rolls["green"], next_roll["green"]),
@@ -56,9 +63,9 @@ def roll_power(r: Roll) -> int:
     return max(1, r["red"]) * max(1, r["green"]) * max(1, r["blue"])
 
 
-def main[A, B]() -> tuple[A, B]:
-    lines1 = get_input(Path(__file__).parent / "input01.txt")
-    games = [parse_line(l) for l in lines1]
+def main() -> tuple[int, int]:
+    lines: list[str] = get_input(Path(__file__).parent / "input01.txt")
+    games = [parse_line(line) for line in lines]
     return sum([g["id"] for g in games if game_possible(g)]), sum(
         [roll_power(min_cubes(g)) for g in games]
     )
@@ -66,5 +73,5 @@ def main[A, B]() -> tuple[A, B]:
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    print("Solution 1", sol1)
-    print("Solution 2", sol2)
+    pp(f"Solution 1: {sol1}")
+    pp(f"Solution 2: {sol2}")

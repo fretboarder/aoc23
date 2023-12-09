@@ -12,7 +12,7 @@ def parse(lines: list[str]) -> tuple[str, dict[str, list[str]], list[str]]:
     inst = lines[0]
     start_nodes = []
 
-    tree = dict()
+    tree = {}
     for line in lines[2:]:
         _key, _left, _right = re.findall(r"\w+", line)
         tree.update({_key: [_left, _right]})
@@ -40,7 +40,7 @@ def solution2(inst: str, m: dict, start_nodes: list[str]) -> int:
     return lcm(*results)
 
 
-def main[A, B]() -> tuple[A, B]:
+def main() -> tuple[int, int]:
     inst, tree, start_nodes = parse(get_input(Path(__file__).parent / "input01.txt"))
     return solution1(inst, tree, "AAA", lambda n: n == "ZZZ"), solution2(
         inst, tree, start_nodes
