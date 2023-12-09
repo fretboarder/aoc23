@@ -1,5 +1,6 @@
 from collections import Counter
 from dataclasses import dataclass, field
+from enum import Enum
 from itertools import groupby
 from pathlib import Path
 from pprint import pp
