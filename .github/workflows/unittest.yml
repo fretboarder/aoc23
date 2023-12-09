@@ -1,0 +1,42 @@
+name: unittest
+
+on:
+  push:
+    # branches:
+    #   - "*"
+    #   - "!main"
+    #   - "!master"
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  unittest:
+    # we don't wanna run on the release-please branch or when the release-please branch has been merged
+    if: ${{ !(startsWith(github.ref_name, 'release-please') || startsWith(github.head_ref, 'release-please'))}}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+
+    - name: Prepare poetry
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install
+
+    - name: Run tests with nox
+      run: poetry run nox -s pytest

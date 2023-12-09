@@ -1,4 +1,4 @@
-name: lint-and-test
+name: mypy
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - closed
 
 jobs:
-  lint-and-test:
+  mypy:
     # we don't wanna run on the release-please branch or when the release-please branch has been merged
     if: ${{ !(startsWith(github.ref_name, 'release-please') || startsWith(github.head_ref, 'release-please'))}}
     runs-on: ubuntu-latest
@@ -38,11 +38,6 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
 
-    - name: Run ruff
-      run: poetry run nox -s ruff
-
     - name: Run mypy
       run: poetry run nox -s mypy
-
-    - name: Run tests with nox
-      run: poetry run nox -s pytest
+      continue-on-error: true

@@ -1,9 +1,10 @@
 # Advent Of Code 2023
 
 
-[![Unit Test](https://github.com/fretboarder/aoc23/actions/workflows/test.yml/badge.svg)](https://github.com/fretboarder/aoc23/actions/workflows/test.yml)
+[![pytest](https://github.com/fretboarder/aoc23/actions/workflows/unittest.yml/badge.svg)](https://github.com/fretboarder/aoc23/actions/workflows/unittest.yml)
+[![ruff](https://github.com/fretboarder/aoc23/actions/workflows/ruff.yml/badge.svg)](https://github.com/fretboarder/aoc23/actions/workflows/ruff.yml)
+[![mypy](https://github.com/fretboarder/aoc23/actions/workflows/mypy.yml/badge.svg)](https://github.com/fretboarder/aoc23/actions/workflows/mypy.yml)
 [![Release Creation](https://github.com/fretboarder/aoc23/actions/workflows/releaseplease.yml/badge.svg)](https://github.com/fretboarder/aoc23/actions/workflows/releaseplease.yml)
-[![PyPI publication](https://github.com/fretboarder/aoc23/actions/workflows/publish.yml/badge.svg)](https://github.com/fretboarder/aoc23/actions/workflows/publish.yml)
 
 ---
 
