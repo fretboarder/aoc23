@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/fretboarder/aoc23/compare/v0.2.0...v0.3.0) (2023-12-09)
+
+
+### Features
+
+* day05 completed ([63f3ee9](https://github.com/fretboarder/aoc23/commit/63f3ee9d69f58845aa1cda14ed95881c795164a5))
+* day09 completed ([dbba128](https://github.com/fretboarder/aoc23/commit/dbba12834f5ff9b9e5ade2715fde91464bdea2ea))
+
+
+### Bug Fixes
+
+* add missing import for day7 ([5c1505d](https://github.com/fretboarder/aoc23/commit/5c1505d1f428dff8f56624b935b73e9df8fa11c1))
+
 ## [0.2.0](https://github.com/fretboarder/aoc23/compare/v0.1.0...v0.2.0) (2023-12-08)
 
 
