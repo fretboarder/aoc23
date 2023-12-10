@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.0](https://github.com/fretboarder/aoc23/compare/v0.3.1...v0.4.0) (2023-12-10)
+
+
+### Features
+
+* day10 / part1 completed ([95bd6c0](https://github.com/fretboarder/aoc23/commit/95bd6c062cc576834f3f2d83a69f7be75e0c8816))
+* use encrypted input files ([5f00cb7](https://github.com/fretboarder/aoc23/commit/5f00cb7dc41b7856e310f209c1b8261ba7ffaa66))
+
+
+### Bug Fixes
+
+* add some more utility functions ([a070e51](https://github.com/fretboarder/aoc23/commit/a070e5146dd339d01c3a8e4952634a37302c302a))
+
 ## [0.3.1](https://github.com/fretboarder/aoc23/compare/v0.3.0...v0.3.1) (2023-12-09)
 
 
