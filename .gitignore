@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode
 
+# input files
+input*.txt
+ex*.txt
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
