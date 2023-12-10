@@ -1,10 +1,16 @@
 """Tool description."""
 
 from importlib import import_module
+from pathlib import Path
 
 import click
 from aoc23 import _version
-from aoc23.support import sha256
+from aoc23.support import (
+    decrypted_content,
+    encrypted_content,
+    get_aoc_secret,
+    sha256,
+)
 
 
 @click.group()
@@ -42,6 +48,34 @@ def solutions() -> None:
             click.echo(f"  Solution 2: {sha256(sol2)}")
         except ModuleNotFoundError:
             pass
+
+
+@cli.command()
+@click.argument("filepath")
+def enc(filepath: str) -> None:
+    """Encrypt a plain-text input file."""
+    final_path = Path(__file__).parent.parent / filepath
+
+    if final_path.exists():
+        key = get_aoc_secret("aoc2023", "encryptionkey")
+        if key:
+            content = encrypted_content(final_path, bytes.fromhex(key))
+            new_path = Path(str(final_path) + ".enc")
+            with new_path.open("wb") as f:
+                f.write(content)
+
+
+@cli.command()
+@click.argument("filepath")
+def dec(filepath: str) -> None:
+    """Decrypt an encrypted input file."""
+    final_path = Path(__file__).parent.parent / filepath
+
+    if final_path.exists():
+        key = get_aoc_secret("aoc2023", "encryptionkey")
+        if key:
+            content = decrypted_content(final_path, bytes.fromhex(key))
+            click.echo(content)
 
 
 def main() -> None:
