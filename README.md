@@ -49,3 +49,8 @@ $ aoc solutions
 ========== DAY 02 ==========
   ...
 ```
+
+## Legal Notice
+
+For copyright reasons, input data stored in this repo is encrypted by a random
+private encryption key only known by the author of this repository.
