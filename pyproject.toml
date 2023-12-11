@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aoc23"
-version = "0.5.0"
+version = "0.5.1"
 description = "aoc23"
 authors = ["fretboarder <cini01@gmail.com>"]
 readme = "README.md"

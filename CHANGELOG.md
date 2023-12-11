@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/fretboarder/aoc23/compare/v0.5.0...v0.5.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* day 10 part1 completed ([0e28a12](https://github.com/fretboarder/aoc23/commit/0e28a120b755d389ed4cc295fa8b471a6158df44))
+
 ## [0.5.0](https://github.com/fretboarder/aoc23/compare/v0.4.0...v0.5.0) (2023-12-11)
 
 
