@@ -28,7 +28,7 @@ def test_valid_neighbor1(grid, startsym, matches):
     res = [
         main.is_valid_neighbor(grid(g1, startsym), main.Pos(2, 1), d) for d in main.DIRS
     ]
-    assert len([r for r in res if r]) == matches
+    assert len([r for r, _ in res if r]) == matches
 
 
 g2 = [
@@ -46,7 +46,7 @@ def test_valid_neighbor2(grid, startsym, matches):
     res = [
         main.is_valid_neighbor(grid(g2, startsym), main.Pos(2, 1), d) for d in main.DIRS
     ]
-    assert len([r for r in res if r]) == matches
+    assert len([r for r, _ in res if r]) == matches
 
 
 g3 = [
@@ -64,7 +64,7 @@ def test_valid_neighbor3(grid, startsym, matches):
     res = [
         main.is_valid_neighbor(grid(g3, startsym), main.Pos(2, 1), d) for d in main.DIRS
     ]
-    assert len([r for r in res if r]) == matches
+    assert len([r for r, _ in res if r]) == matches
 
 
 g4 = [
@@ -82,7 +82,7 @@ def test_valid_neighbor4(grid, startsym, matches):
     res = [
         main.is_valid_neighbor(grid(g4, startsym), main.Pos(2, 1), d) for d in main.DIRS
     ]
-    assert len([r for r in res if r]) == matches
+    assert len([r for r, _ in res if r]) == matches
 
 
 g5 = [
@@ -100,4 +100,4 @@ def test_valid_neighbor5(grid, startsym, matches):
     res = [
         main.is_valid_neighbor(grid(g5, startsym), main.Pos(2, 1), d) for d in main.DIRS
     ]
-    assert len([r for r in res if r]) == matches
+    assert len([r for r, _ in res if r]) == matches

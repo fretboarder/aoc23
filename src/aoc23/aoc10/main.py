@@ -121,13 +121,13 @@ def get_starting_directions(
 
 
 def bfs(grid: Grid, initial_pos: Pos, initial_dir: Direction) -> list[Pos]:
-    steps = 1
+    steps: int = 1
     visited = {initial_pos}
 
     positions: list[Pos] = []
     _, new_pos = is_valid_neighbor(grid, initial_pos, initial_dir)
 
-    frontier = deque([(new_pos, steps)])
+    frontier: deque[tuple[Pos, int]] = deque([(new_pos, steps)])
 
     while frontier:
         current_pos, steps = frontier.popleft()
@@ -149,8 +149,8 @@ def solution1(grid: Grid) -> int:
         bfs(grid, get_initial_pos(grid), d)
         for d in get_starting_directions(grid, get_initial_pos(grid))
     ]
-
-    for i, (p1, p2) in enumerate(zip(*steps), start=2):
+    i = 0
+    for i, (p1, p2) in enumerate(zip(*steps), start=2):  # noqa: B007
         if p1 == p2:
             break
 
