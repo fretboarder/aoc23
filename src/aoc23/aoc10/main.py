@@ -1,4 +1,4 @@
-from collections import deque, namedtuple
+from collections import deque
 from enum import Enum
 from pathlib import Path
 from pprint import pp
@@ -158,11 +158,11 @@ def solution1(grid: Grid) -> int:
 
 
 def main() -> tuple[int, int]:
-    lines = get_input(Path(__file__).parent / "input01.txt")
+    lines = get_input(Path(__file__).parent / "ex01.txt")
     return solution1(lines), 0
 
 
 if __name__ == "__main__":
     sol1, sol2 = main()
-    pp(f"Solution 1: {sol1}")  # 7173
-    pp(f"Solution 2: {sol2}")
+    pp(f"Solution 1: {sol1}")
+    pp(f"Solution 2: {sol2}")  # check main2.py
