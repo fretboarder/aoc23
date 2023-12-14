@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/fretboarder/aoc23/compare/v0.6.0...v0.7.0) (2023-12-14)
+
+
+### Features
+
+* day14 completed ([7ffa584](https://github.com/fretboarder/aoc23/commit/7ffa584ed82e2542c8b6c7ccf09bc2b91795a453))
+
 ## [0.6.0](https://github.com/fretboarder/aoc23/compare/v0.5.1...v0.6.0) (2023-12-13)
 
 
