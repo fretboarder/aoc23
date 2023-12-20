@@ -168,7 +168,44 @@ def solution1(circuit: Circuit) -> int:
 
 
 def solution2(circuit: Circuit) -> int:
+    circuit_graph(circuit).view()
     return 0
+
+
+def circuit_graph(c: Circuit) -> graphviz.Digraph:
+    # Create a graph
+    dot = graphviz.Digraph(comment="Circuit")
+
+    visited: set[Module] = set()
+    root = c["button"]["comp"]
+    frontier: deque[tuple[int, Module]] = deque([(0, root)])
+    while frontier:
+        indent, current = frontier.pop()
+        if current in visited:
+            continue
+        visited.add(current)
+        shape = (
+            "square"
+            if isinstance(current, Flop)
+            else "hexagon"
+            if isinstance(current, Con)
+            else "triangle"
+        )
+        if isinstance(current, Con) and len(current.inputs) == 1:
+            shape = "cds"
+        col = "red" if current.state == LOW else "blue"
+        dot.node(
+            current.name,
+            shape=shape,
+            label=f"{current.__class__.__name__}({current.name})",
+            color=col,
+        )
+
+        for ch in current.outputs:
+            dot.edge(current.name, ch.name)
+            frontier.append((indent + 2, ch))
+
+    return dot
 
 
 def main() -> tuple[int, int]:
