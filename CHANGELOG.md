@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.0](https://github.com/fretboarder/aoc23/compare/v0.9.0...v0.10.0) (2023-12-20)
+
+
+### Features
+
+* day 18 comleted ([3d04dc7](https://github.com/fretboarder/aoc23/commit/3d04dc70975e0248b963a1faf650213fb5e1cd33))
+* day20 completed ([ed0e850](https://github.com/fretboarder/aoc23/commit/ed0e8505b37762722ae1cdef5f48147d307ffe3b))
+
+
+### Bug Fixes
+
+* day19 part1 completed ([f01ed91](https://github.com/fretboarder/aoc23/commit/f01ed91b3f5d49d7f47708b0d4d7b27775ce318a))
+* day20 part1 - use ABC ([67dbf40](https://github.com/fretboarder/aoc23/commit/67dbf4038b6db5807015dc441fb324df4d4268e8))
+* day20 part1 completed ([bb482ab](https://github.com/fretboarder/aoc23/commit/bb482ababda688a064cb29315ffd77e1f1e8d7c6))
+
 ## [0.9.0](https://github.com/fretboarder/aoc23/compare/v0.8.0...v0.9.0) (2023-12-16)
 
 
