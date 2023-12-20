@@ -132,8 +132,8 @@ def solution2(g: pd.DataFrame, p1r: P1Result):
             ]
 
             if len(final_cols) or len(final_rows):
-                pp(f"MATCH when changing {row} / {col} to {g.at[row, col]!r}")
-                pp(f"{final_cols=} .. {final_rows=}")
+                # pp(f"MATCH when changing {row} / {col} to {g.at[row, col]!r}")
+                # pp(f"{final_cols=} .. {final_rows=}")
                 FINAL_COLS, FINAL_ROWS = final_cols, final_rows
                 g.at[row, col] = orig_sym
                 new_refl_found = True
