@@ -4,6 +4,10 @@
 # input files
 input*.txt
 ex*.txt
+# main test files
+main[0-9].py
+# Graphviz
+Digraph.*
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
