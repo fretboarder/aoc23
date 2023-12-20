@@ -122,7 +122,7 @@ def solution(instructions: dict[str, Instr], vals: list[Rating]) -> int:
         result = eval_accept(instr, inp)
         results.append((inp, result, sum(inp.values())))
 
-    pp(results, indent=4)
+    # pp(results, indent=4)
 
     return sum(r for _, t, r in results if t == "A")
 
