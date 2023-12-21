@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/fretboarder/aoc23/compare/v0.10.0...v0.10.1) (2023-12-20)
+
+
+### Bug Fixes
+
+* day 19 remove print() ([2f7476a](https://github.com/fretboarder/aoc23/commit/2f7476a0a394ac3b9c8a0df7612c901db93d9945))
+* day13 remove prints ([2886b78](https://github.com/fretboarder/aoc23/commit/2886b7861dd06071f276b5c65068c52539eeb9ce))
+
 ## [0.10.0](https://github.com/fretboarder/aoc23/compare/v0.9.0...v0.10.0) (2023-12-20)
 
 
