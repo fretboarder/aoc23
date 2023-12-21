@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import itertools
-from collections import defaultdict, deque
 from enum import Enum
 from pathlib import Path
 from pprint import pp
@@ -69,11 +67,9 @@ def get_neighbors(grid: Grid, current_pos: Pos) -> tuple[Pos, ...]:
     )
 
 
-def bfs(grid: Grid, initial_pos: Pos, step_count: int) -> set[tuple[int, Pos]]:
+def move(grid: Grid, initial_pos: Pos, step_count: int) -> set[tuple[int, Pos]]:
     # for every round, move away from every plot 1 step
-
     visited: set[tuple[int, Pos]] = {(0, initial_pos)}
-
     for _ in range(step_count):
         local_stack: set[tuple[int, Pos]] = set()
         for steps, pos in visited:
@@ -82,29 +78,50 @@ def bfs(grid: Grid, initial_pos: Pos, step_count: int) -> set[tuple[int, Pos]]:
             }
             local_stack |= reachable_neighbors
         visited |= set(local_stack)
-
-    # for s in range(stepcount):
-    #     offsetpos = {p for o, p in offsets if o == s}
-    #     print_grid(make_grid(grid, offsetpos))
-    #     pp("===============================")
     return visited
 
 
 def solution1(grid: Grid) -> int:
     steps = 64
     start = get_start_pos(grid, "S")
-    visited = bfs(grid, start, steps)
+    visited = move(grid, start, steps)
     g = make_grid(grid, {v for s, v in visited if s == steps})
-    print_grid(g)
-    # pp(len(visited))
-    # for i in range(steps + 1):
-    #     pp(f"{i+1}: {len({v for s, v in visited if s == i}) + 1}")
-
     return len({v for s, v in visited if s == steps}) + 1
 
 
+def cmod(x: complex, modulo: int) -> complex:
+    return complex(x.real % modulo, x.imag % modulo)
+
+
+def calculate(repetitions: int, t1: int, t2: int, t3: int) -> int:
+    return t1 + repetitions * (t2 - t1 + (repetitions - 1) * (t3 - t2 - t2 + t1) // 2)
+
+
 def solution2(grid: Grid) -> int:
-    return 0
+    goal, modulo, steps, sol1 = 26501365, 131, 64, 0
+
+    # positions of "." and "S", coordinates represented as complex
+    positions: dict[complex, str] = {
+        i + j * 1j: c for i, r in enumerate(grid) for j, c in enumerate(r) if c in ".S"
+    }
+
+    done: list[int] = []
+    todo = {x for x in positions if positions[x] == "S"}
+
+    for s in range(3 * modulo):
+        # if s == steps:
+        #     sol1 = len(todo)  # noqa: ERA001
+        if s % modulo == steps + 1:
+            done.append(len(todo))
+
+        todo = {
+            t + offset  # that's the new positions
+            for offset in (1, -1, 1j, -1j)
+            for t in todo
+            if cmod(t + offset, modulo) in positions
+        }
+
+    return calculate(goal // modulo, *done)
 
 
 def main() -> tuple[int, int]:
