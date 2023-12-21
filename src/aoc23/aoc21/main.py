@@ -3,23 +3,19 @@ from __future__ import annotations
 from enum import Enum
 from pathlib import Path
 from pprint import pp
-from typing import NamedTuple
 
 from aoc23.support import get_input
 
 Grid = list[str]
 
-
-class Pos(NamedTuple):
-    col: int  # x
-    row: int  # y
+Pos = complex  # x=real, y=imag
 
 
 class Direction(Enum):
-    LEFT = Pos(-1, 0)
-    RIGHT = Pos(1, 0)
-    UP = Pos(0, -1)
-    DOWN = Pos(0, 1)
+    LEFT = -1
+    RIGHT = 1
+    UP = -1j
+    DOWN = 1j
 
 
 def print_grid(grid: Grid) -> None:
@@ -31,7 +27,7 @@ def make_grid(grid: Grid, steps: set[Pos]) -> Grid:
     g = [list(row) for row in grid]
 
     for s in steps:
-        g[s.row][s.col] = "O"
+        g[int(s.real)][int(s.imag)] = "O"
 
     return ["".join(row) for row in g]
 
@@ -44,37 +40,22 @@ def get_start_pos(grid: Grid, char: str) -> Pos:
     raise ValueError(msg)
 
 
-def is_inside_grid(grid: Grid, pos: Pos) -> bool:
-    return 0 <= pos.col < len(grid[0]) and 0 <= pos.row < len(grid)
-
-
-def neighbor(pos: Pos, direction: Direction) -> Pos:
-    return Pos(pos.col + direction.value.col, pos.row + direction.value.row)
-
-
-def is_valid_neighbor(grid: Grid, pos: Pos, direction: Direction) -> bool:
-    n = neighbor(pos, direction)
-    return is_inside_grid(grid, n) and (grid[n.row][n.col] not in ("S", "#"))
-
-
-def get_neighbors(grid: Grid, current_pos: Pos) -> tuple[Pos, ...]:
-    return tuple(
-        [
-            neighbor(current_pos, fd)
-            for fd in Direction
-            if is_valid_neighbor(grid, current_pos, fd)
-        ]
-    )
-
-
 def move(grid: Grid, initial_pos: Pos, step_count: int) -> set[tuple[int, Pos]]:
+    blocks = {
+        c + r * 1j
+        for r, row in enumerate(grid)
+        for c, col in enumerate(row)
+        if col == "#"
+    }
     # for every round, move away from every plot 1 step
     visited: set[tuple[int, Pos]] = {(0, initial_pos)}
     for _ in range(step_count):
         local_stack: set[tuple[int, Pos]] = set()
         for steps, pos in visited:
             reachable_neighbors = {
-                (steps + 1, n) for n in set(get_neighbors(grid, pos))
+                (steps + 1, n)
+                for n in {pos + offs.value for offs in Direction}
+                if n not in blocks
             }
             local_stack |= reachable_neighbors
         visited |= set(local_stack)
@@ -83,10 +64,8 @@ def move(grid: Grid, initial_pos: Pos, step_count: int) -> set[tuple[int, Pos]]:
 
 def solution1(grid: Grid) -> int:
     steps = 64
-    start = get_start_pos(grid, "S")
-    visited = move(grid, start, steps)
-    g = make_grid(grid, {v for s, v in visited if s == steps})
-    return len({v for s, v in visited if s == steps}) + 1
+    visited = move(grid, get_start_pos(grid, "S"), steps)
+    return len({v for s, v in visited if s == steps})
 
 
 def cmod(x: complex, modulo: int) -> complex:
@@ -132,4 +111,4 @@ def main() -> tuple[int, int]:
 if __name__ == "__main__":
     sol1, sol2 = main()
     pp(f"Solution 1: {sol1}")
-    pp(f"Solution 2: {sol2}")  # check main2.py
+    pp(f"Solution 2: {sol2}")
