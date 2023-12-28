@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict, deque
+from copy import deepcopy
 from dataclasses import dataclass, field
 from functools import reduce
 from itertools import chain
@@ -16,7 +17,7 @@ def parse_line(lineno: int, line: str) -> Brick:
     return Brick(lineno, *[int(n) for n in e])
 
 
-@dataclass(unsafe_hash=True)
+@dataclass(unsafe_hash=True, slots=True)
 class Brick:
     n: int = field(hash=True)  # actually just the line number as unique id
     x1: int
@@ -78,12 +79,14 @@ def resting_on(bottom: Iterable[Brick], brick: Brick) -> set[Brick]:
     )
 
 
-def pulldown(all_bricks: dict[int, list[Brick]]) -> int:
+def pulldown(all_bricks: dict[int, list[Brick]]) -> tuple[dict[Brick, set[Brick]], int]:
     """Return the number of bricks that could be disintegrated."""
-    _bottom, *_remaining = list(all_bricks.values())
-    processed = set(_bottom)
-    remaining = deque(chain(*_remaining))
+    processed = set()  # set(_bottom)
+    remaining = deque(chain(*list(all_bricks.values())))
+    # key brick is resting on set of other bricks
     resting_map: dict[Brick, set[Brick]] = defaultdict(set)
+
+    bricks_dropped = 0
 
     while remaining:
         brick = remaining.popleft()
@@ -101,31 +104,74 @@ def pulldown(all_bricks: dict[int, list[Brick]]) -> int:
             all_bricks[brick.z1].remove(brick)
             all_bricks[new_z1].append(brick)
             brick.z1, brick.z2 = new_z1, new_z2
+            bricks_dropped += 1
 
+    return resting_map, bricks_dropped
+
+
+def pulldown2(all_bricks: dict[int, set[Brick]]) -> int:
+    """Return the number of bricks that could be disintegrated."""
+    processed = set()  # set(_bottom)
+    remaining = deque(chain(*list(all_bricks.values())))
+    # key brick is resting on set of other bricks
+
+    bricks_dropped = 0
+
+    while remaining:
+        brick = remaining.popleft()
+        rests_on = resting_on(processed, brick)
+        processed.add(brick)
+        top_z = next(iter(rests_on)).z2 if rests_on else 0
+
+        if (drop_offs := brick.z1 - 1 - top_z) > 0:
+            new_z1, new_z2 = brick.z1 - drop_offs, brick.z2 - drop_offs
+            all_bricks[brick.z1].remove(brick)
+            all_bricks[new_z1].add(brick)
+            brick.z1, brick.z2 = new_z1, new_z2
+            bricks_dropped += 1
+
+    return bricks_dropped
+
+
+def get_disintegratable(
+    resting_map: dict[Brick, set[Brick]], all_bricks: dict[int, list[Brick]]
+) -> set[Brick]:
     # preset list with all bricks
     can_dis = {b for _, bricklist in all_bricks.items() for b in bricklist}
     # identify those which cannot be disintegrated
     not_dis = {next(iter(rs)) for rs in resting_map.values() if len(rs) == 1}
-    return len(can_dis - not_dis)
+    return can_dis - not_dis
 
 
 def solution1(blocks: list[Brick]) -> int:
-    layers = defaultdict(lambda: [])
+    layers: dict[int, list[Brick]] = defaultdict(list)
     for b in blocks:
         layers[b.z1].append(b)
-    return pulldown(layers)
+
+    resting_map = pulldown(layers)[0]
+    return len(get_disintegratable(resting_map, layers))
 
 
 def solution2(blocks: list[Brick]) -> int:
-    return 0
+    total_dropped = 0
+    for i, brick in enumerate(blocks, start=1):
+        remaining = set(deepcopy(blocks)) - {brick}
+        layers: dict[int, set[Brick]] = defaultdict(set)
+        for b in sorted(remaining, key=lambda br: br.z1):
+            layers[b.z1].add(b)
+        dropped = pulldown2(layers)
+        pp(f"{i:04}: {brick} {dropped=}")
+        total_dropped += dropped
+
+    return total_dropped
 
 
 def main() -> tuple[int, int]:
     lines = get_input(Path(__file__).parent / "input01.txt")
     blocks = sorted(
-        [parse_line(i, line) for i, line in enumerate(lines)], key=lambda brck: brck.z1
+        [parse_line(i, line) for i, line in enumerate(lines, start=1)],
+        key=lambda brck: brck.z1,
     )
-
     return solution1(blocks), solution2(blocks)
 
 
