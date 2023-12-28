@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.0](https://github.com/fretboarder/aoc23/compare/v0.11.1...v0.12.0) (2023-12-28)
+
+
+### Features
+
+* day25 completed ([9d8cdef](https://github.com/fretboarder/aoc23/commit/9d8cdefb86552d977b7503c947fa01bd4a3f6390))
+* ugly brute force for day22 part 2 ([e86fc52](https://github.com/fretboarder/aoc23/commit/e86fc520c3e2d5e9ef576bb5ca345785b38aaae2))
+
 ## [0.11.1](https://github.com/fretboarder/aoc23/compare/v0.11.0...v0.11.1) (2023-12-28)
 
 
