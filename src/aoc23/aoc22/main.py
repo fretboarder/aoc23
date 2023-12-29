@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 from collections import defaultdict, deque
-from copy import deepcopy
 from dataclasses import dataclass, field
 from functools import reduce
 from itertools import chain
+from math import inf
 from pathlib import Path
 from pprint import pp
 from typing import Iterable
 
 from aoc23.support import get_input
+
+Grid = list[list[int]]
 
 
 def parse_line(lineno: int, line: str) -> Brick:
@@ -26,6 +28,13 @@ class Brick:
     x2: int
     y2: int
     z2: int
+
+    def clone(self) -> Brick:
+        return Brick(self.n, self.x1, self.y1, self.z1, self.x2, self.y2, self.z2)
+
+    @property
+    def height(self) -> int:
+        return self.z2 - self.z1
 
     def overlap(self, other: Brick) -> bool:
         my_min_x, my_max_x = (
@@ -109,30 +118,6 @@ def pulldown(all_bricks: dict[int, list[Brick]]) -> tuple[dict[Brick, set[Brick]
     return resting_map, bricks_dropped
 
 
-def pulldown2(all_bricks: dict[int, set[Brick]]) -> int:
-    """Return the number of bricks that could be disintegrated."""
-    processed = set()  # set(_bottom)
-    remaining = deque(chain(*list(all_bricks.values())))
-    # key brick is resting on set of other bricks
-
-    bricks_dropped = 0
-
-    while remaining:
-        brick = remaining.popleft()
-        rests_on = resting_on(processed, brick)
-        processed.add(brick)
-        top_z = next(iter(rests_on)).z2 if rests_on else 0
-
-        if (drop_offs := brick.z1 - 1 - top_z) > 0:
-            new_z1, new_z2 = brick.z1 - drop_offs, brick.z2 - drop_offs
-            all_bricks[brick.z1].remove(brick)
-            all_bricks[new_z1].add(brick)
-            brick.z1, brick.z2 = new_z1, new_z2
-            bricks_dropped += 1
-
-    return bricks_dropped
-
-
 def get_disintegratable(
     resting_map: dict[Brick, set[Brick]], all_bricks: dict[int, list[Brick]]
 ) -> set[Brick]:
@@ -143,27 +128,71 @@ def get_disintegratable(
     return can_dis - not_dis
 
 
-def solution1(blocks: list[Brick]) -> int:
+def solution1(bricks: list[Brick]) -> int:
     layers: dict[int, list[Brick]] = defaultdict(list)
-    for b in blocks:
+    for b in bricks:
         layers[b.z1].append(b)
 
     resting_map = pulldown(layers)[0]
     return len(get_disintegratable(resting_map, layers))
 
 
-def solution2(blocks: list[Brick]) -> int:
-    total_dropped = 0
-    for i, brick in enumerate(blocks, start=1):
-        remaining = set(deepcopy(blocks)) - {brick}
-        layers: dict[int, set[Brick]] = defaultdict(set)
-        for b in sorted(remaining, key=lambda br: br.z1):
-            layers[b.z1].add(b)
-        dropped = pulldown2(layers)
-        pp(f"{i:04}: {brick} {dropped=}")
-        total_dropped += dropped
+def get_dim(bricks: Iterable[Brick]) -> tuple[int, int]:
+    min_x = min_y = inf
+    max_x = max_y = -inf
+    for b in bricks:
+        min_x = min(min_x, b.x1, b.x2)
+        min_y = min(min_y, b.y1, b.y2)
+        max_x = max(max_x, b.x1, b.x2)
+        max_y = max(max_y, b.y1, b.y2)
 
-    return total_dropped
+    return int(max_x - min_x), int(max_y - min_y)
+
+
+def update_grid(grid: Grid, b: Brick) -> int:
+    def row_max(row: int, r1: int, r2: int) -> int:
+        return max([grid[row][col] for col in range(r1, r2 + 1)])
+
+    def col_max(col: int, r1: int, r2: int) -> int:
+        return max([grid[row][col] for row in range(r1, r2 + 1)])
+
+    def update_row(row: int, r1: int, r2: int, value: int) -> None:
+        for col in range(r1, r2 + 1):
+            grid[row][col] = value
+
+    def update_col(col: int, r1: int, r2: int, value: int) -> None:
+        for row in range(r1, r2 + 1):
+            grid[row][col] = value
+
+    min_x, max_x = (b.x1, b.x2) if b.x1 <= b.x2 else (b.x2, b.x1)
+    min_y, max_y = (b.y1, b.y2) if b.y1 <= b.y2 else (b.y2, b.y1)
+    max_z = (
+        row_max(b.y1, min_x, max_x) if min_y == max_y else col_max(b.x1, min_y, max_y)
+    )
+    new_z = max_z + 1 + b.height
+
+    if min_y == max_y:  # horizontal
+        update_row(b.y1, min_x, max_x, new_z)
+    else:  # vertical or 1 cube
+        update_col(b.x1, min_y, max_y, new_z)
+    # return the number of units dropped
+    return b.z1 - (max_z + 1)
+
+
+def drop(grid: Grid, sorted_bricks: Iterable[Brick]) -> int:
+    return sum(1 if update_grid(grid, brick) > 0 else 0 for brick in sorted_bricks)
+
+
+def solution2(bricks: list[Brick]) -> int:
+    """Bricks is already compacted and must be sorted."""
+    width, height = get_dim(bricks)
+    return sum(
+        drop(
+            [[0 for _ in range(width + 1)] for _ in range(height + 1)],
+            bricks[:i] + bricks[i + 1 :],
+        )
+        for i, _ in enumerate(bricks)
+    )
 
 
 def main() -> tuple[int, int]:
@@ -172,7 +201,7 @@ def main() -> tuple[int, int]:
         [parse_line(i, line) for i, line in enumerate(lines, start=1)],
         key=lambda brck: brck.z1,
     )
-    return solution1(blocks), solution2(blocks)
+    return solution1(blocks), solution2(sorted(blocks, key=lambda brck: brck.z1))
 
 
 if __name__ == "__main__":
